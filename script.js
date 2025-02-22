@@ -9,7 +9,7 @@ let playerBottom = parseInt(window.getComputedStyle(player).getPropertyValue("bo
 let playerLeft = parseInt(window.getComputedStyle(player).getPropertyValue("left"));
 let moveSpeed = 5;  // Speed of movement left and right
 
-// Get platform position
+// Platform Positioning (relative to the game container)
 let platformBottom = parseInt(window.getComputedStyle(platform).getPropertyValue("bottom"));
 let platformLeft = parseInt(window.getComputedStyle(platform).getPropertyValue("left"));
 let platformWidth = platform.offsetWidth;
@@ -18,7 +18,7 @@ document.addEventListener("keydown", (e) => {
     // Jumping functionality (Spacebar)
     if (e.code === "Space" && !isJumping) {
         isJumping = true;
-        velocity = 12;
+        velocity = 12; // Jump velocity
     }
 
     // Moving left (ArrowLeft or A)
@@ -41,24 +41,25 @@ document.addEventListener("keydown", (e) => {
 function gameLoop() {
     // Apply gravity and jumping behavior
     if (isJumping) {
-        velocity -= gravity;
+        velocity -= gravity; // Simulate gravity pulling the player down
         playerBottom += velocity;
         
-        // Prevent the player from falling through the platform
+        // Check if player hits the platform
         if (playerBottom <= platformBottom + platform.offsetHeight && 
             playerLeft + player.offsetWidth > platformLeft && 
             playerLeft < platformLeft + platformWidth) {
-            playerBottom = platformBottom + platform.offsetHeight; // Stop at platform
-            isJumping = false; // The player lands
+            playerBottom = platformBottom + platform.offsetHeight; // Player lands on platform
+            isJumping = false; // Stop jumping
+            velocity = 0; // Stop downward velocity
         }
     } else {
-        // Apply gravity when falling
+        // Apply gravity if the player is not on a platform
         if (playerBottom > 0) {
-            playerBottom -= gravity; 
+            playerBottom -= gravity;
         }
     }
 
-    // Update the player's position
+    // Update the player's position on the screen
     player.style.bottom = `${playerBottom}px`;
     requestAnimationFrame(gameLoop);
 }
