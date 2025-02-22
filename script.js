@@ -3,13 +3,14 @@ const platform = document.getElementById("platform");
 const gameContainer = document.querySelector(".game-container");
 
 let isJumping = false;
-let gravity = 0.8;
-let velocity = 0;
+let gravity = 0.8;  // How strong gravity is
+let velocity = 0;  // Velocity of the jump or fall
+let moveSpeed = 5;  // Speed of player movement (left/right)
+
 let playerBottom = parseInt(window.getComputedStyle(player).getPropertyValue("bottom"));
 let playerLeft = parseInt(window.getComputedStyle(player).getPropertyValue("left"));
-let moveSpeed = 5;  // Speed of movement left and right
 
-// Platform Positioning (relative to the game container)
+// Platform properties
 let platformBottom = parseInt(window.getComputedStyle(platform).getPropertyValue("bottom"));
 let platformLeft = parseInt(window.getComputedStyle(platform).getPropertyValue("left"));
 let platformWidth = platform.offsetWidth;
@@ -19,7 +20,7 @@ document.addEventListener("keydown", (e) => {
     // Jumping functionality (Spacebar)
     if (e.code === "Space" && !isJumping) {
         isJumping = true;
-        velocity = 12; // Jump velocity
+        velocity = 12;  // Jump velocity
     }
 
     // Moving left (ArrowLeft or A)
@@ -43,32 +44,33 @@ function gameLoop() {
     // Apply gravity and jumping behavior
     if (isJumping) {
         velocity -= gravity; // Simulate gravity pulling the player down
-        playerBottom += velocity;
+        playerBottom += velocity; // Apply gravity effect
 
-        // Check for collision with the platform
+        // Check if player lands on the platform
         if (playerBottom <= platformBottom + platformHeight && 
             playerLeft + player.offsetWidth > platformLeft && 
             playerLeft < platformLeft + platformWidth) {
             
             // Player lands on the platform
-            playerBottom = platformBottom + platformHeight; // Stop the player at platform level
-            isJumping = false; // Stop jumping
-            velocity = 0; // Stop downward velocity after landing
+            playerBottom = platformBottom + platformHeight; // Stop at the platform
+            isJumping = false; // No longer jumping
+            velocity = 0; // Reset downward velocity
         }
     } else {
-        // Apply gravity when falling
+        // Apply gravity when falling (only when player is not on the platform)
         if (playerBottom > 0) {
-            playerBottom -= gravity; // Apply gravity when falling
+            playerBottom -= gravity; // Apply gravity
         }
     }
 
-    // Debugging logs to check positions
-    console.log("Player Bottom: ", playerBottom); // Logs player's vertical position
-    console.log("Platform Bottom: ", platformBottom); // Logs platform's vertical position
-    console.log("Player Left: ", playerLeft); // Logs player's horizontal position
-    console.log("Platform Left: ", platformLeft); // Logs platform's horizontal position
+    // Prevent the player from going below the ground (bottom of the game container)
+    if (playerBottom < 0) {
+        playerBottom = 0;
+    }
 
-    // Update the player's position
+    // Update player's position
     player.style.bottom = `${playerBottom}px`;
-    requestAnimationFrame(gameLoop); // Recursively call gameLoop for animation
+    requestAnimationFrame(gameLoop); // Keep the game running
 }
+
+gameLoop();
