@@ -44,16 +44,16 @@ function gameLoop() {
     if (isJumping) {
         velocity -= gravity; // Simulate gravity pulling the player down
         playerBottom += velocity;
-        
+
         // Check for collision with the platform
         if (playerBottom <= platformBottom + platformHeight && 
             playerLeft + player.offsetWidth > platformLeft && 
             playerLeft < platformLeft + platformWidth) {
             
             // Player lands on the platform
-            playerBottom = platformBottom + platformHeight;
+            playerBottom = platformBottom + platformHeight; // Stop the player at platform level
             isJumping = false; // Stop jumping
-            velocity = 0; // Stop downward velocity
+            velocity = 0; // Stop downward velocity after landing
         }
     } else {
         // Apply gravity when falling
@@ -72,4 +72,3 @@ function gameLoop() {
     player.style.bottom = `${playerBottom}px`;
     requestAnimationFrame(gameLoop); // Recursively call gameLoop for animation
 }
-
