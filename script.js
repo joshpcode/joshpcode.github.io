@@ -13,6 +13,7 @@ let moveSpeed = 5;  // Speed of movement left and right
 let platformBottom = parseInt(window.getComputedStyle(platform).getPropertyValue("bottom"));
 let platformLeft = parseInt(window.getComputedStyle(platform).getPropertyValue("left"));
 let platformWidth = platform.offsetWidth;
+let platformHeight = platform.offsetHeight;
 
 document.addEventListener("keydown", (e) => {
     // Jumping functionality (Spacebar)
@@ -44,22 +45,24 @@ function gameLoop() {
         velocity -= gravity; // Simulate gravity pulling the player down
         playerBottom += velocity;
         
-        // Check if player hits the platform
-        if (playerBottom <= platformBottom + platform.offsetHeight && 
+        // Check for collision with the platform
+        if (playerBottom <= platformBottom + platformHeight && 
             playerLeft + player.offsetWidth > platformLeft && 
             playerLeft < platformLeft + platformWidth) {
-            playerBottom = platformBottom + platform.offsetHeight; // Player lands on platform
+            
+            // Player lands on the platform
+            playerBottom = platformBottom + platformHeight;
             isJumping = false; // Stop jumping
             velocity = 0; // Stop downward velocity
         }
     } else {
-        // Apply gravity if the player is not on a platform
+        // Apply gravity when falling
         if (playerBottom > 0) {
-            playerBottom -= gravity;
+            playerBottom -= gravity; // Apply gravity when falling
         }
     }
 
-    // Update the player's position on the screen
+    // Update the player's position
     player.style.bottom = `${playerBottom}px`;
     requestAnimationFrame(gameLoop);
 }
