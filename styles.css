@@ -23,7 +23,7 @@
     width: 200px;
     height: 20px;
     background-color: green;
-    bottom: 150px; /* You can adjust the platform's height */
+    bottom: 150px;
     left: 300px;
 }
 
@@ -31,7 +31,7 @@
 #floor {
     position: absolute;
     width: 100%;
-    height: 20px;  /* Floor thickness */
-    background-color: #333;  /* Dark color to represent the floor */
-    bottom: 0;  /* Position it at the bottom of the game container */
+    height: 20px;
+    background-color: #333;
+    bottom: 0;
 }
