@@ -20,4 +20,71 @@ let isMovingRight = false;
 document.addEventListener("keydown", (e) => {
     if (e.code === "Space" && playerBottom <= platformBottom + platformHeight) {
         // Jump only if player is on the platform or at the ground
-        isJumping = true
+        isJumping = true;
+        velocity = 12;  // Jump velocity
+    }
+
+    // Left movement
+    if (e.code === "ArrowLeft" || e.code === "KeyA") {
+        isMovingLeft = true;
+    }
+
+    // Right movement
+    if (e.code === "ArrowRight" || e.code === "KeyD") {
+        isMovingRight = true;
+    }
+});
+
+document.addEventListener("keyup", (e) => {
+    if (e.code === "ArrowLeft" || e.code === "KeyA") {
+        isMovingLeft = false;
+    }
+
+    if (e.code === "ArrowRight" || e.code === "KeyD") {
+        isMovingRight = false;
+    }
+});
+
+function gameLoop() {
+    // Apply gravity and jumping behavior
+    if (isJumping) {
+        velocity -= gravity;  // Apply gravity to simulate falling
+        playerBottom += velocity;  // Update the player's vertical position
+
+        // Check if the player is falling and hits the platform
+        if (playerBottom <= platformBottom + platformHeight && 
+            playerLeft + player.offsetWidth > platformLeft && 
+            playerLeft < platformLeft + platformWidth && velocity < 0) {
+            // If player lands on platform
+            playerBottom = platformBottom + platformHeight;  // Correct position
+            isJumping = false;  // Stop jumping
+            velocity = 0;  // Stop downward velocity
+        }
+    } else {
+        // If the player is not jumping, they should fall due to gravity
+        if (playerBottom > 0) {
+            playerBottom -= gravity;  // Apply gravity
+        }
+    }
+
+    // Prevent player from falling below the game container's bottom boundary
+    if (playerBottom > gameContainerBottom - player.offsetHeight) {
+        playerBottom = gameContainerBottom - player.offsetHeight;
+    }
+
+    // Smooth left/right movement
+    if (isMovingLeft && playerLeft > 0) {
+        playerLeft -= moveSpeed;
+    }
+    if (isMovingRight && playerLeft < gameContainer.offsetWidth - player.offsetWidth) {
+        playerLeft += moveSpeed;
+    }
+
+    // Update player's position
+    player.style.bottom = `${playerBottom}px`;
+    player.style.left = `${playerLeft}px`;
+
+    requestAnimationFrame(gameLoop);  // Keep the game running smoothly
+}
+
+gameLoop();
