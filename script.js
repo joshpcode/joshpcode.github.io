@@ -62,9 +62,14 @@ function gameLoop() {
         }
     }
 
+    // Debugging logs to check positions
+    console.log("Player Bottom: ", playerBottom); // Logs player's vertical position
+    console.log("Platform Bottom: ", platformBottom); // Logs platform's vertical position
+    console.log("Player Left: ", playerLeft); // Logs player's horizontal position
+    console.log("Platform Left: ", platformLeft); // Logs platform's horizontal position
+
     // Update the player's position
     player.style.bottom = `${playerBottom}px`;
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop); // Recursively call gameLoop for animation
 }
 
-gameLoop();
