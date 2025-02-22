@@ -60,7 +60,7 @@ function gameLoop() {
             velocity = 0; // Reset downward velocity
         }
     } else {
-        // Apply gravity when falling (only when player is not on the platform)
+        // If player is not on the platform, apply gravity
         if (playerBottom > 0) {
             playerBottom -= gravity; // Apply gravity
         }
