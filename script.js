@@ -16,6 +16,9 @@ let platformLeft = parseInt(window.getComputedStyle(platform).getPropertyValue("
 let platformWidth = platform.offsetWidth;
 let platformHeight = platform.offsetHeight;
 
+// Set the game container's bottom boundary
+let gameContainerBottom = gameContainer.offsetHeight;
+
 document.addEventListener("keydown", (e) => {
     // Jumping functionality (Spacebar)
     if (e.code === "Space" && !isJumping) {
@@ -68,7 +71,12 @@ function gameLoop() {
         playerBottom = 0; // Set player to the bottom edge of the container
     }
 
-    // Prevent the player from going below the platform
+    // Prevent the player from falling below the game container bottom boundary
+    if (playerBottom > gameContainerBottom - player.offsetHeight) {
+        playerBottom = gameContainerBottom - player.offsetHeight;
+    }
+
+    // Prevent the player from going below the platform (if platform is present)
     if (playerBottom < platformBottom + platformHeight) {
         playerBottom = platformBottom + platformHeight; // Correct position when landing
     }
