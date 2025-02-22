@@ -9,6 +9,11 @@ let playerBottom = parseInt(window.getComputedStyle(player).getPropertyValue("bo
 let playerLeft = parseInt(window.getComputedStyle(player).getPropertyValue("left"));
 let moveSpeed = 5;  // Speed of movement left and right
 
+// Get platform position
+let platformBottom = parseInt(window.getComputedStyle(platform).getPropertyValue("bottom"));
+let platformLeft = parseInt(window.getComputedStyle(platform).getPropertyValue("left"));
+let platformWidth = platform.offsetWidth;
+
 document.addEventListener("keydown", (e) => {
     // Jumping functionality (Spacebar)
     if (e.code === "Space" && !isJumping) {
@@ -34,20 +39,26 @@ document.addEventListener("keydown", (e) => {
 });
 
 function gameLoop() {
+    // Apply gravity and jumping behavior
     if (isJumping) {
         velocity -= gravity;
         playerBottom += velocity;
         
-        if (playerBottom <= 50) {
-            playerBottom = 50; // Stop at platform height
-            isJumping = false;
+        // Prevent the player from falling through the platform
+        if (playerBottom <= platformBottom + platform.offsetHeight && 
+            playerLeft + player.offsetWidth > platformLeft && 
+            playerLeft < platformLeft + platformWidth) {
+            playerBottom = platformBottom + platform.offsetHeight; // Stop at platform
+            isJumping = false; // The player lands
         }
     } else {
+        // Apply gravity when falling
         if (playerBottom > 0) {
-            playerBottom -= gravity; // Apply gravity when falling
+            playerBottom -= gravity; 
         }
     }
 
+    // Update the player's position
     player.style.bottom = `${playerBottom}px`;
     requestAnimationFrame(gameLoop);
 }
