@@ -75,6 +75,12 @@ function gameLoop() {
         velocity = 0;  // Stop downward velocity (stop falling)
     }
 
+    // Prevent player from falling out of the container (game boundary)
+    if (playerBottom < 0) {
+        playerBottom = 0;  // Stop at the top of the game container
+        velocity = 0;
+    }
+
     // Smooth left/right movement
     if (isMovingLeft && playerLeft > 0) {
         playerLeft -= moveSpeed;
