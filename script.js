@@ -4,7 +4,7 @@ const gameContainer = document.querySelector(".game-container");
 
 let isJumping = false;
 let gravity = 0.8;  // Gravity strength (affects falling speed)
-let velocity = 0;  // Vertical speed (falling or jumping
+let velocity = 0;  // Vertical speed (falling or jumping)
 let moveSpeed = 3;  // Horizontal movement speed
 let playerBottom = parseInt(window.getComputedStyle(player).getPropertyValue("bottom"));
 let playerLeft = parseInt(window.getComputedStyle(player).getPropertyValue("left"));
@@ -50,26 +50,28 @@ function gameLoop() {
     if (isJumping) {
         velocity -= gravity;  // Apply gravity to simulate falling
         playerBottom += velocity;  // Update the player's vertical position
-
-        // Check if the player is falling and hits the platform
-        if (playerBottom <= platformBottom + platformHeight && 
-            playerLeft + player.offsetWidth > platformLeft && 
-            playerLeft < platformLeft + platformWidth && velocity < 0) {
-            // If player lands on platform
-            playerBottom = platformBottom + platformHeight;  // Correct position
-            isJumping = false;  // Stop jumping
-            velocity = 0;  // Stop downward velocity
-        }
     } else {
         // If the player is not jumping, they should fall due to gravity
         if (playerBottom > 0) {
-            playerBottom -= gravity;  // Apply gravity
+            velocity -= gravity;  // Apply gravity continuously
+            playerBottom += velocity;  // Update position
         }
+    }
+
+    // Platform Collision Logic (Landing on the platform)
+    if (playerBottom <= platformBottom + platformHeight &&
+        playerLeft + player.offsetWidth > platformLeft &&
+        playerLeft < platformLeft + platformWidth && velocity < 0) {
+        // The player is falling, and has collided with the platform
+        playerBottom = platformBottom + platformHeight;  // Correct position to land on the platform
+        velocity = 0;  // Stop downward velocity (stop falling)
+        isJumping = false;  // Stop jumping as player is now on the platform
     }
 
     // Prevent player from falling below the game container's bottom boundary
     if (playerBottom > gameContainerBottom - player.offsetHeight) {
-        playerBottom = gameContainerBottom - player.offsetHeight;
+        playerBottom = gameContainerBottom - player.offsetHeight;  // Keep player within bounds
+        velocity = 0;  // Stop falling when hitting the bottom
     }
 
     // Smooth left/right movement
