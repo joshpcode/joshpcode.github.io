@@ -4,7 +4,7 @@ const gameContainer = document.querySelector(".game-container");
 
 let isJumping = false;
 let gravity = 0.8;  // Gravity strength (affects falling speed)
-let velocity = 0;  // Vertical speed (falling or jumping)
+let velocity = 0;  // Vertical speed (falling or jumping
 let moveSpeed = 3;  // Horizontal movement speed
 let playerBottom = parseInt(window.getComputedStyle(player).getPropertyValue("bottom"));
 let playerLeft = parseInt(window.getComputedStyle(player).getPropertyValue("left"));
