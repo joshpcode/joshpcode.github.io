@@ -65,7 +65,12 @@ function gameLoop() {
 
     // Prevent the player from going below the ground (bottom of the game container)
     if (playerBottom < 0) {
-        playerBottom = 0;
+        playerBottom = 0; // Set player to the bottom edge of the container
+    }
+
+    // Prevent the player from going below the platform
+    if (playerBottom < platformBottom + platformHeight) {
+        playerBottom = platformBottom + platformHeight; // Correct position when landing
     }
 
     // Update player's position
